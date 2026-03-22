@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MindMesh — Technical Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #1c1e23;
+  --surface:  #22252c;
+  --card:     #282c34;
+  --hover:    #2e323b;
+  --border:   #363b47;
+  --border-2: #2a2e38;
+  --ink:      #e8eaf0;
+  --ink-2:    #9ba3b2;
+  --ink-3:    #6b7280;
+  --ink-4:    #3f4452;
+  --accent:   #5b8def;
+  --accent-d: #3d6fd4;
+  --accent-bg:#1e2a42;
+  --accent-b: #2d4070;
+  --green:    #4ade80;
+  --green-bg: #142a1e;
+  --green-b:  #1e4030;
+  --amber:    #fbbf24;
+  --amber-bg: #2a2010;
+  --amber-b:  #3d3010;
+  --red:      #f87171;
+  --red-bg:   #2a1414;
+  --purple:   #a78bfa;
+  --purple-bg:#1e1a2e;
+  --purple-b: #2d2850;
+  --mono:     'IBM Plex Mono', monospace;
+  --serif:    'Instrument Serif', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;font-size:15px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:.88em;background:var(--card);border:1px solid var(--border);padding:.1em .35em;border-radius:4px;color:var(--accent)}
+
+/* ── LAYOUT ── */
+.site{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:248px;flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border-2);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;z-index:50;
+  padding:1.5rem 0 3rem;
+}
+.sidebar-brand{
+  display:flex;align-items:center;gap:.6rem;
+  padding:0 1.25rem 1.25rem;
+  border-bottom:1px solid var(--border-2);
+  margin-bottom:1.25rem;
+}
+.brand-mark{
+  width:30px;height:30px;border-radius:7px;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;
+}
+.brand-name{font-family:var(--mono);font-weight:700;font-size:.85rem;color:var(--ink)}
+.brand-ver{font-family:var(--mono);font-size:.62rem;color:var(--ink-3);margin-top:.1rem}
+
+.nav-group{padding:0 1rem;margin-bottom:1.25rem}
+.nav-group-label{
+  font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-4);
+  padding:0 .3rem;margin-bottom:.35rem;
+}
+.nav-link{
+  display:flex;align-items:center;gap:.5rem;
+  color:var(--ink-2);font-size:.82rem;
+  padding:.3rem .5rem;border-radius:6px;
+  margin-bottom:.05rem;transition:all .15s;
+}
+.nav-link:hover{background:var(--hover);color:var(--ink)}
+.nav-link.active{background:var(--accent-bg);color:var(--accent);font-weight:500}
+.nav-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+
+/* ── MAIN ── */
+.content{margin-left:248px;flex:1;min-width:0}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(28,30,35,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-2);
+  padding:.65rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-crumb{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);display:flex;align-items:center;gap:.4rem}
+.topbar-crumb span{color:var(--ink-2)}
+.topbar-actions{display:flex;gap:.6rem}
+.topbar-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.75rem;font-family:var(--mono);
+  color:var(--ink-2);border:1px solid var(--border);
+  background:var(--surface);
+  padding:.3rem .75rem;border-radius:6px;transition:all .15s;
+}
+.topbar-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+
+/* ── PAGE ── */
+.page{max-width:840px;margin:0 auto;padding:3.5rem 2.5rem 6rem}
+
+/* ── HERO ── */
+.doc-hero{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:2.5rem;margin-bottom:3rem;
+  position:relative;overflow:hidden;
+}
+.doc-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--purple),var(--green));
+}
+.hero-eyebrow{
+  font-family:var(--mono);font-size:.65rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.9rem;
+}
+.hero-title{
+  font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.2rem);
+  font-weight:400;line-height:1.1;letter-spacing:-.01em;
+  color:var(--ink);margin-bottom:.9rem;
+}
+.hero-title em{font-style:italic;color:var(--accent)}
+.hero-desc{color:var(--ink-2);font-size:.9rem;line-height:1.8;max-width:540px;margin-bottom:1.75rem}
+.badge-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.75rem}
+.badge{
+  font-family:var(--mono);font-size:.65rem;font-weight:500;
+  padding:.2rem .55rem;border-radius:4px;
+  border:1px solid var(--border);color:var(--ink-3);background:var(--surface);
+}
+.hero-btns{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn-filled{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:var(--accent);color:#fff;
+  font-size:.8rem;font-weight:600;font-family:var(--mono);
+  padding:.55rem 1.25rem;border-radius:7px;transition:all .15s;
+}
+.btn-filled:hover{background:var(--accent-d)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:var(--surface);color:var(--ink-2);
+  border:1px solid var(--border);
+  font-size:.8rem;font-family:var(--mono);
+  padding:.55rem 1.25rem;border-radius:7px;transition:all .15s;
+}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+
+/* ── SECTION ── */
+.doc-section{margin-bottom:3.5rem}
+.section-tag{
+  font-family:var(--mono);font-size:.62rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:.65rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.section-tag::after{content:'';flex:1;height:1px;background:var(--border-2)}
+.doc-h2{
+  font-family:var(--serif);font-size:1.9rem;font-weight:400;
+  line-height:1.2;letter-spacing:-.01em;margin-bottom:.65rem;color:var(--ink);
+}
+.doc-h3{font-weight:600;font-size:.9rem;margin-bottom:.5rem;color:var(--ink)}
+.doc-p{color:var(--ink-2);font-size:.88rem;line-height:1.8;margin-bottom:.9rem}
+
+/* ── FEATURE GRID ── */
+.feat-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1px;background:var(--border-2);
+  border:1px solid var(--border-2);border-radius:10px;overflow:hidden;margin-top:1.25rem;
+}
+.feat-cell{
+  background:var(--card);padding:1.25rem;
+  transition:background .15s;
+}
+.feat-cell:hover{background:var(--hover)}
+.feat-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem}
+.feat-emoji{font-size:1.1rem}
+.feat-chip{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.feat-name{font-weight:600;font-size:.87rem;color:var(--ink);margin-bottom:.3rem}
+.feat-desc{font-size:.78rem;color:var(--ink-2);line-height:1.6}
+
+/* ── TECH CARDS ── */
+.tech-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-top:1.25rem}
+.tech-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:1.1rem;transition:all .2s;
+}
+.tech-card:hover{border-color:var(--accent-b);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.tech-chip{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;margin-bottom:.6rem;display:inline-block}
+.tech-name{font-weight:600;font-size:.92rem;color:var(--ink);margin-bottom:.3rem}
+.tech-desc{font-size:.77rem;color:var(--ink-2);line-height:1.6}
+.tech-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.65rem}
+.tech-tag{font-family:var(--mono);font-size:.6rem;padding:.12rem .4rem;border-radius:3px;background:var(--surface);border:1px solid var(--border);color:var(--ink-3)}
+
+/* ── WEBSOCKET DIAGRAM ── */
+.diagram-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;margin-top:1.25rem;
+}
+.diagram-head{
+  background:var(--surface);border-bottom:1px solid var(--border-2);
+  padding:.65rem 1.25rem;display:flex;align-items:center;justify-content:space-between;
+}
+.diagram-title{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--ink)}
+.diagram-meta{font-family:var(--mono);font-size:.62rem;color:var(--ink-3)}
+.diagram-body{padding:1.75rem 1.25rem}
+
+.ws-nodes{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin-bottom:1.5rem}
+.ws-node{border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:.85rem 1.1rem;text-align:center;min-width:100px}
+.ws-node.server{background:var(--accent-bg);border-color:var(--accent-b)}
+.ws-node-icon{font-size:1.3rem;margin-bottom:.2rem}
+.ws-node-name{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink)}
+.ws-node-sub{font-family:var(--mono);font-size:.6rem;color:var(--ink-3);margin-top:.1rem}
+.ws-node.server .ws-node-name{color:var(--accent)}
+
+.ws-wire{flex:1;min-width:50px;max-width:100px;position:relative;height:28px;display:flex;align-items:center}
+.ws-wire-track{width:100%;height:1px;background:var(--border);position:relative;overflow:hidden}
+.ws-wire-pulse{position:absolute;top:-1.5px;left:-40%;width:40%;height:4px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:wPulse 2s ease infinite}
+.ws-wire-pulse.rev{animation:wPulseR 2s .7s ease infinite}
+@keyframes wPulse{0%{left:-40%}100%{left:100%}}
+@keyframes wPulseR{0%{left:100%}100%{left:-40%}}
+.ws-wire-label{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.57rem;color:var(--ink-4);white-space:nowrap}
+
+.room-pills{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.room-pill{font-family:var(--mono);font-size:.7rem;padding:.25rem .65rem;border-radius:5px;border:1px solid}
+
+.ws-events{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.4rem}
+.ws-ev{background:var(--surface);border:1px solid var(--border-2);border-radius:7px;padding:.55rem .7rem;display:flex;align-items:flex-start;gap:.45rem}
+.ws-ev-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:.35rem}
+.ws-ev-name{font-family:var(--mono);font-size:.68rem;font-weight:700;color:var(--ink);margin-bottom:.1rem}
+.ws-ev-desc{font-size:.7rem;color:var(--ink-2);line-height:1.4}
+
+/* ── WEBRTC ── */
+.rtc-live{font-family:var(--mono);font-size:.6rem;color:var(--green);background:var(--green-bg);border:1px solid var(--green-b);padding:.15rem .45rem;border-radius:3px;display:flex;align-items:center;gap:.3rem}
+.rtc-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.rtc-peers{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.rtc-peer{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;text-align:center;min-width:120px}
+.rtc-screen{width:72px;height:46px;border-radius:6px;background:var(--bg);border:1px solid var(--border);margin:0 auto .6rem;display:flex;align-items:center;justify-content:center;font-size:1.3rem;position:relative;overflow:hidden}
+.rtc-screen::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(91,141,239,.1),transparent)}
+.rtc-peer-name{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink)}
+.rtc-peer-sub{font-size:.62rem;color:var(--ink-3)}
+
+.rtc-relay{background:var(--accent-bg);border:1px solid var(--accent-b);border-radius:8px;padding:.7rem 1rem;text-align:center;min-width:90px}
+.rtc-relay-name{font-family:var(--mono);font-size:.68rem;font-weight:700;color:var(--accent);margin-bottom:.15rem}
+.rtc-relay-sub{font-size:.6rem;color:var(--ink-3)}
+
+.rtc-arrow{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.rtc-arrow-line{width:60px;height:1px;background:var(--border);position:relative;overflow:hidden}
+.rtc-arrow-pulse{position:absolute;top:-1px;left:-50%;width:50%;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:wPulse 1.8s ease infinite}
+.rtc-arrow-label{font-family:var(--mono);font-size:.58rem;color:var(--ink-3)}
+
+.rtc-steps{background:var(--surface);border:1px solid var(--border-2);border-radius:8px;overflow:hidden;margin-top:1.25rem}
+.rtc-step{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 1rem;border-bottom:1px solid var(--border-2)}
+.rtc-step:last-child{border-bottom:none}
+.rtc-step:hover{background:var(--hover)}
+.rtc-num{width:20px;height:20px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--ink-2);font-family:var(--mono);font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
+.rtc-text{font-family:var(--mono);font-size:.73rem;color:var(--ink-2);line-height:1.5;padding-top:.05rem}
+.rtc-text code{background:var(--bg);border-color:var(--border-2)}
+.rtc-text strong{color:var(--green)}
+
+/* ── AI SECTION ── */
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem}
+@media(max-width:680px){.ai-grid{grid-template-columns:1fr}}
+.ai-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ai-card-head{background:var(--surface);border-bottom:1px solid var(--border-2);padding:.6rem 1rem;font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:.4rem}
+.ai-card-body{padding:1rem}
+
+.chat{display:flex;flex-direction:column;gap:.6rem}
+.chat-msg{display:flex;gap:.45rem;align-items:flex-start}
+.chat-msg.user{flex-direction:row-reverse}
+.chat-av{width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:var(--surface);font-size:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;font-family:var(--mono)}
+.chat-bub{max-width:86%;padding:.5rem .75rem;border-radius:8px;font-size:.77rem;line-height:1.5}
+.chat-msg.ai .chat-bub{background:var(--surface);border:1px solid var(--border-2);border-top-left-radius:2px;color:var(--ink-2)}
+.chat-msg.user .chat-bub{background:var(--accent-bg);border:1px solid var(--accent-b);border-top-right-radius:2px;color:var(--ink)}
+.chat-tag{display:inline-block;background:var(--green-bg);border:1px solid var(--green-b);color:var(--green);font-family:var(--mono);font-size:.62rem;padding:.1rem .4rem;border-radius:3px;margin-top:.3rem}
+
+.model-table{width:100%;border-collapse:collapse;font-size:.77rem;margin-top:.65rem}
+.model-table th{text-align:left;padding:.45rem .65rem;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--border-2);background:var(--surface)}
+.model-table td{padding:.45rem .65rem;border-bottom:1px solid var(--border-2);color:var(--ink-2)}
+.model-table tr:last-child td{border-bottom:none}
+.model-chip{font-family:var(--mono);font-size:.62rem;font-weight:700;padding:.1rem .4rem;border-radius:3px}
+
+.pipeline{display:flex;flex-direction:column;gap:.3rem;margin-top:.75rem}
+.pipe-step{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;background:var(--surface);border:1px solid var(--border-2);border-radius:5px;font-size:.73rem;font-family:var(--mono);color:var(--ink-2)}
+.pipe-num{width:17px;height:17px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--ink-3);font-size:.58rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── STREAK ── */
+.streak-wrap{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.25rem}
+.streak-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;flex:1;min-width:200px}
+.streak-big{font-family:var(--serif);font-size:4rem;font-weight:400;line-height:1;color:var(--ink);margin-bottom:.1rem}
+.streak-label{font-size:.78rem;color:var(--ink-3);margin-bottom:1rem}
+.streak-track{height:4px;background:var(--border);border-radius:2px;margin:.9rem 0 .4rem}
+.streak-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--amber),var(--red))}
+.streak-note{font-size:.7rem;color:var(--ink-3)}
+
+.streak-states{display:flex;flex-direction:column;gap:.45rem;flex:1;min-width:220px}
+.streak-state{display:flex;align-items:flex-start;gap:.6rem;padding:.6rem .75rem;border-radius:8px;border:1px solid}
+.streak-state-name{font-weight:600;font-size:.8rem;margin-bottom:.1rem}
+.streak-state-desc{font-size:.73rem;color:var(--ink-2)}
+
+/* ── API TABLE ── */
+.api-table{width:100%;border-collapse:collapse;font-size:.8rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:.9rem}
+.api-table thead{background:var(--surface)}
+.api-table th{text-align:left;padding:.6rem .9rem;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--border-2)}
+.api-table td{padding:.6rem .9rem;border-bottom:1px solid var(--border-2);color:var(--ink-2)}
+.api-table tr:last-child td{border-bottom:none}
+.api-table tbody tr:hover td{background:var(--hover)}
+.method{font-family:var(--mono);font-size:.62rem;font-weight:700;padding:.13rem .42rem;border-radius:3px}
+.m-get{background:var(--green-bg);color:var(--green);border:1px solid var(--green-b)}
+.m-post{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-b)}
+.m-patch{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-b)}
+.m-delete{background:var(--red-bg);color:var(--red);border:1px solid #4a2020}
+.ep{font-family:var(--mono);font-size:.74rem;color:var(--ink)}
+
+/* ── SCHEMA ── */
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem;margin-top:1.25rem}
+.schema-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.schema-head{background:var(--surface);border-bottom:1px solid var(--border-2);padding:.55rem .9rem;display:flex;align-items:center;gap:.5rem}
+.schema-model{font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--ink)}
+.schema-coll{font-family:var(--mono);font-size:.6rem;color:var(--ink-3);background:var(--bg);border:1px solid var(--border-2);padding:.1rem .4rem;border-radius:3px}
+.schema-fields{padding:.65rem .9rem;display:flex;flex-direction:column;gap:.25rem}
+.sf{display:flex;align-items:center;gap:.45rem;padding:.22rem .3rem;border-radius:4px;font-size:.76rem}
+.sf:hover{background:var(--hover)}
+.sf-key{font-family:var(--mono);color:var(--accent);font-size:.7rem;min-width:130px}
+.sf-type{font-family:var(--mono);font-size:.62rem;background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-b);padding:.08rem .32rem;border-radius:3px;flex-shrink:0}
+.sf-note{font-size:.67rem;color:var(--ink-3);margin-left:auto}
+
+/* ── ENV ── */
+.env-table{width:100%;border-collapse:collapse;font-size:.8rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:.9rem}
+.env-table th{background:var(--surface);text-align:left;padding:.55rem .85rem;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--border-2)}
+.env-table td{padding:.55rem .85rem;border-bottom:1px solid var(--border-2);color:var(--ink-2)}
+.env-table tr:last-child td{border-bottom:none}
+.env-key{font-family:var(--mono);font-size:.7rem;color:var(--green)}
+.req{background:var(--red-bg);color:var(--red);font-family:var(--mono);font-size:.58rem;font-weight:700;padding:.1rem .32rem;border-radius:3px;border:1px solid #4a2020}
+
+/* ── DEPLOY ── */
+.deploy-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.25rem}
+@media(max-width:600px){.deploy-grid{grid-template-columns:1fr}}
+.deploy-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.deploy-head{background:var(--surface);border-bottom:1px solid var(--border-2);padding:.6rem 1rem;display:flex;align-items:center;gap:.45rem;font-weight:600;font-size:.85rem;color:var(--ink)}
+.deploy-body{padding:1.1rem}
+.deploy-row{display:flex;align-items:center;justify-content:space-between;padding:.4rem .55rem;border-radius:5px;border:1px solid var(--border-2);background:var(--surface);margin-bottom:.35rem;font-size:.74rem}
+.dk{font-family:var(--mono);font-size:.66rem;color:var(--ink-3)}
+.dv{font-family:var(--mono);font-size:.7rem;color:var(--ink);font-weight:500}
+
+/* ── CODE ── */
+.code{background:var(--bg);border:1px solid var(--border-2);border-radius:8px;padding:1rem 1.1rem;font-family:var(--mono);font-size:.74rem;line-height:1.75;overflow-x:auto;color:var(--ink-2);margin-top:.65rem}
+.code .c{color:var(--ink-4)}
+.code .kw{color:var(--purple)}
+.code .fn{color:var(--accent)}
+.code .str{color:var(--green)}
+
+/* ── CALLOUT ── */
+.callout{border-left:2px solid var(--accent);background:var(--accent-bg);padding:.8rem 1rem;border-radius:0 7px 7px 0;margin:.9rem 0;font-size:.83rem;color:var(--ink-2);line-height:1.7}
+.callout strong{color:var(--accent)}
+.callout.green{border-color:var(--green);background:var(--green-bg)}
+.callout.green strong{color:var(--green)}
+.callout.amber{border-color:var(--amber);background:var(--amber-bg)}
+.callout.amber strong{color:var(--amber)}
+
+/* ── TEAM ── */
+.team-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem}
+.team-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1rem;text-align:center;flex:1;min-width:130px;max-width:170px;transition:all .2s}
+.team-card:hover{border-color:var(--accent-b);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.team-ava{width:52px;height:52px;border-radius:50%;background:var(--surface);border:1px solid var(--border);margin:0 auto .75rem;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.team-ava img{width:100%;height:100%;object-fit:cover}
+.team-name{font-weight:600;font-size:.85rem;margin-bottom:.15rem;color:var(--ink)}
+.team-role{font-size:.72rem;color:var(--ink-3)}
+.team-stack{font-family:var(--mono);font-size:.6rem;color:var(--accent);margin-top:.25rem}
+
+/* ── FOOTER ── */
+.doc-footer{border-top:1px solid var(--border-2);background:var(--surface);padding:2rem 2.5rem;max-width:840px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-name{font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--ink)}
+.footer-sub{font-size:.72rem;color:var(--ink-3);margin-top:.1rem}
+.footer-links{display:flex;gap:1.25rem}
+.footer-links a{font-size:.75rem;color:var(--ink-3);font-family:var(--mono);transition:color .15s}
+.footer-links a:hover{color:var(--accent)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .sidebar{display:none}
+  .content{margin-left:0}
+  .page{padding:2rem 1.25rem 4rem}
+  .topbar{padding:.65rem 1.25rem}
+}
+</style>
+</head>
+<body>
+<div class="site">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">🧠</div>
+    <div>
+      <div class="brand-name">MindMesh</div>
+      <div class="brand-ver">v1.0 · 2026</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Getting Started</div>
+    <a class="nav-link active" href="#overview">Overview</a>
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#quickstart">Quick Start</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Architecture</div>
+    <a class="nav-link" href="#tech-stack">Tech Stack</a>
+    <a class="nav-link" href="#websockets"><span class="nav-dot" style="background:#5b8def"></span>WebSockets</a>
+    <a class="nav-link" href="#webrtc"><span class="nav-dot" style="background:#a78bfa"></span>WebRTC</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Platform</div>
+    <a class="nav-link" href="#ai">AI Integration</a>
+    <a class="nav-link" href="#gamification">Gamification</a>
+    <a class="nav-link" href="#database">Database Schema</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Reference</div>
+    <a class="nav-link" href="#api">API Endpoints</a>
+    <a class="nav-link" href="#env">Environment</a>
+    <a class="nav-link" href="#deploy">Deployment</a>
+    <a class="nav-link" href="#team">Team</a>
+  </div>
+</aside>
+
+<!-- CONTENT -->
+<div class="content">
+  <div class="topbar">
+    <div class="topbar-crumb">docs <span>/</span> <span>mindmesh</span></div>
+    <div class="topbar-actions">
+      <a class="topbar-btn" href="https://mind-mesh-refactored.onrender.com" target="_blank">↗ Live App</a>
+      <a class="topbar-btn" href="https://github.com/imjoe77/Mind-Mesh" target="_blank">⌥ GitHub</a>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <div class="doc-hero reveal" id="overview">
+      <div class="hero-eyebrow">Technical Documentation</div>
+      <h1 class="hero-title">MindMesh —<br/><em>study, together.</em></h1>
+      <p class="hero-desc">An AI-powered real-time collaborative study platform. Live video, shared whiteboard, AI tutoring, peer discovery, and a gamified streak system — all in one full-stack application.</p>
+      <div class="badge-row">
+        <span class="badge">Next.js 16.1</span><span class="badge">React 19.2</span>
+        <span class="badge">Socket.IO 4.8</span><span class="badge">WebRTC P2P</span>
+        <span class="badge">MongoDB Atlas</span><span class="badge">OpenRouter AI</span>
+        <span class="badge">NextAuth.js 4</span><span class="badge">Tailwind CSS 4</span>
+      </div>
+      <div class="hero-btns">
+        <a class="btn-filled" href="https://mind-mesh-refactored.onrender.com" target="_blank">→ Open Live Demo</a>
+        <a class="btn-ghost" href="https://github.com/imjoe77/Mind-Mesh" target="_blank">⌥ Source Code</a>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="doc-section reveal" id="features">
+      <div class="section-tag">Core Features</div>
+      <h2 class="doc-h2">What MindMesh does</h2>
+      <p class="doc-p">Nine distinct features work together inside a single study room — all synchronized across every participant in real time.</p>
+      <div class="feat-grid">
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">📹</span><span class="feat-chip">Video</span></div><div class="feat-name">WebRTC Video Mesh</div><div class="feat-desc">Direct P2P video — no server relay. Camera, mic, and screen sharing support.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">🎨</span><span class="feat-chip">Canvas</span></div><div class="feat-name">Live Whiteboard</div><div class="feat-desc">Multi-user canvas synced via Socket.IO. Every stroke appears on all screens instantly.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">🤖</span><span class="feat-chip">AI</span></div><div class="feat-name">Mittar Assistant</div><div class="feat-desc">Context-aware AI. Knows your page and profile. Navigates the platform, creates groups.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">📄</span><span class="feat-chip">Docs</span></div><div class="feat-name">PDF AI Analysis</div><div class="feat-desc">Upload PDF/TXT. AI extracts topic, key points, and inferences. Full document Q&A.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">🎓</span><span class="feat-chip">Learning</span></div><div class="feat-name">AI Study Tutor</div><div class="feat-desc">Any topic → full module: intro, 6-step roadmap, 8 mastery questions, 8 flashcards.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">⏱</span><span class="feat-chip">Focus</span></div><div class="feat-name">Shared Pomodoro</div><div class="feat-desc">Timer synced across the room. Start it once — everyone's screen switches to the timer.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">🃏</span><span class="feat-chip">Social</span></div><div class="feat-name">Peer Discovery</div><div class="feat-desc">Swipe-based matching on complementary skills. Skill-to-teach meets skill-to-learn.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">🔥</span><span class="feat-chip">Gamification</span></div><div class="feat-name">Streak & XP</div><div class="feat-desc">Daily streaks with grace periods and quest-based restoration. One miss doesn't reset all.</div></div>
+        <div class="feat-cell"><div class="feat-top"><span class="feat-emoji">📊</span><span class="feat-chip">Academic</span></div><div class="feat-name">Marks Intelligence</div><div class="feat-desc">Upload a marks card image — Gemini Vision extracts grades and computes GPA automatically.</div></div>
+      </div>
+    </div>
+
+    <!-- QUICKSTART -->
+    <div class="doc-section reveal" id="quickstart">
+      <div class="section-tag">Quick Start</div>
+      <h2 class="doc-h2">Running locally</h2>
+      <p class="doc-p">MindMesh uses a custom Node server — <code>npm run dev</code> starts <code>server.js</code> directly, which boots Next.js and attaches Socket.IO to the same HTTP server.</p>
+      <div class="code"><span class="c"># Clone & install</span>
+git clone https://github.com/imjoe77/Mind-Mesh.git
+cd Mind-Mesh && npm install
+
+<span class="c"># Configure environment</span>
+cp .env.example .env.local
+<span class="c"># Fill in all required variables (see Environment section)</span>
+
+<span class="c"># Start — runs server.js, not next dev</span>
+npm run dev</div>
+      <div class="callout green">
+        <strong>Note:</strong> The <code>dev</code> script runs <code>node server.js</code>, not the standard Next.js dev server. This is required so Socket.IO can attach to the HTTP server alongside Next.js.
+      </div>
+    </div>
+
+    <!-- TECH STACK -->
+    <div class="doc-section reveal" id="tech-stack">
+      <div class="section-tag">Architecture</div>
+      <h2 class="doc-h2">Tech stack</h2>
+      <p class="doc-p">Every piece is chosen for a specific reason. The custom server, for instance, exists purely because Socket.IO needs a persistent process — which Vercel's serverless can't provide.</p>
+      <div class="tech-row">
+        <div class="tech-card">
+          <div class="tech-chip" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--border)">Framework</div>
+          <div class="tech-name">Next.js 16.1</div>
+          <div class="tech-desc">App Router, API routes, and a custom HTTP server override for Socket.IO support.</div>
+          <div class="tech-tags"><span class="tech-tag">App Router</span><span class="tech-tag">SSR</span><span class="tech-tag">API Routes</span></div>
+        </div>
+        <div class="tech-card" style="border-color:var(--accent-b)">
+          <div class="tech-chip" style="background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-b)">Real-Time</div>
+          <div class="tech-name">Socket.IO 4.8</div>
+          <div class="tech-desc">Bidirectional events for whiteboard, chat, pomodoro sync, feature locking, and WebRTC signaling.</div>
+          <div class="tech-tags"><span class="tech-tag">Rooms</span><span class="tech-tag">Broadcasting</span><span class="tech-tag">State Sync</span></div>
+        </div>
+        <div class="tech-card" style="border-color:var(--purple-b)">
+          <div class="tech-chip" style="background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-b)">Video</div>
+          <div class="tech-name">WebRTC</div>
+          <div class="tech-desc">P2P mesh video. Signal via Socket.IO, resolve via Google STUN, stream directly browser-to-browser.</div>
+          <div class="tech-tags"><span class="tech-tag">P2P Mesh</span><span class="tech-tag">ICE/STUN</span><span class="tech-tag">SDP</span></div>
+        </div>
+        <div class="tech-card" style="border-color:var(--green-b)">
+          <div class="tech-chip" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-b)">Database</div>
+          <div class="tech-name">MongoDB Atlas</div>
+          <div class="tech-desc">Cloud cluster with Mongoose 9 ODM. Cached singleton connections for serverless safety.</div>
+          <div class="tech-tags"><span class="tech-tag">Atlas</span><span class="tech-tag">Mongoose 9</span><span class="tech-tag">ODM</span></div>
+        </div>
+        <div class="tech-card" style="border-color:var(--amber-b)">
+          <div class="tech-chip" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-b)">AI</div>
+          <div class="tech-name">OpenRouter</div>
+          <div class="tech-desc">Unified AI gateway routing to LLaMA 3.1 for chat and Gemini Flash 1.5 for vision.</div>
+          <div class="tech-tags"><span class="tech-tag">LLaMA 3.1</span><span class="tech-tag">Gemini Flash</span><span class="tech-tag">Vision</span></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-chip" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--border)">Auth</div>
+          <div class="tech-name">NextAuth.js 4</div>
+          <div class="tech-desc">Google and GitHub OAuth. JWT session tokens with secure cookie handling.</div>
+          <div class="tech-tags"><span class="tech-tag">Google OAuth</span><span class="tech-tag">GitHub OAuth</span><span class="tech-tag">JWT</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEBSOCKETS -->
+    <div class="doc-section reveal" id="websockets">
+      <div class="section-tag">Real-Time Layer</div>
+      <h2 class="doc-h2">WebSockets —<br/>how Socket.IO is used</h2>
+      <p class="doc-p">Socket.IO is the central nervous system of the platform. A custom <code>server.js</code> wraps Next.js and attaches a persistent Socket.IO server. Every collaborative feature — whiteboard, pomodoro, chat, AI sync, and feature locking — runs through this event bus.</p>
+
+      <div class="diagram-box reveal">
+        <div class="diagram-head">
+          <div class="diagram-title">Socket.IO Event Bus</div>
+          <div class="diagram-meta">path: /api/socketio · WSS + polling fallback</div>
+        </div>
+        <div class="diagram-body">
+          <div class="ws-nodes">
+            <div class="ws-node"><div class="ws-node-icon">💻</div><div class="ws-node-name">Client A</div><div class="ws-node-sub">Browser</div></div>
+            <div class="ws-wire"><div class="ws-wire-track"><div class="ws-wire-pulse"></div></div><div class="ws-wire-label">WSS</div></div>
+            <div class="ws-node server"><div class="ws-node-icon">🖥</div><div class="ws-node-name">server.js</div><div class="ws-node-sub">Socket.IO</div></div>
+            <div class="ws-wire"><div class="ws-wire-track"><div class="ws-wire-pulse rev"></div></div><div class="ws-wire-label">WSS</div></div>
+            <div class="ws-node"><div class="ws-node-icon">💻</div><div class="ws-node-name">Client B</div><div class="ws-node-sub">Browser</div></div>
+          </div>
+
+          <div style="margin-bottom:1rem">
+            <div style="font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.5rem">Room structure</div>
+            <div class="room-pills">
+              <span class="room-pill" style="background:var(--accent-bg);color:var(--accent);border-color:var(--accent-b)">user:{userId}</span>
+              <span class="room-pill" style="background:var(--purple-bg);color:var(--purple);border-color:var(--purple-b)">group:{groupId}</span>
+              <span class="room-pill" style="background:var(--green-bg);color:var(--green);border-color:var(--green-b)">session:{sessionId}</span>
+            </div>
+          </div>
+
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.5rem">Key events</div>
+          <div class="ws-events">
+            <div class="ws-ev"><div class="ws-ev-dot" style="background:var(--accent)"></div><div><div class="ws-ev-name">draw-data</div><div class="ws-ev-desc">Whiteboard strokes broadcast to all session peers</div></div></div>
+            <div class="ws-ev"><div class="ws-ev-dot" style="background:var(--amber)"></div><div><div class="ws-ev-name">pomodoro-start</div><div class="ws-ev-desc">Redirects ALL members to timer view instantly</div></div></div>
+            <div class="ws-ev"><div class="ws-ev-dot" style="background:var(--purple)"></div><div><div class="ws-ev-name">webrtc-offer/answer</div><div class="ws-ev-desc">SDP signaling relayed to set up P2P video</div></div></div>
+            <div class="ws-ev"><div class="ws-ev-dot" style="background:var(--green)"></div><div><div class="ws-ev-name">feature-lock</div><div class="ws-ev-desc">Mutual exclusion on AI/PDF — one user at a time</div></div></div>
+            <div class="ws-ev"><div class="ws-ev-dot" style="background:var(--red)"></div><div><div class="ws-ev-name">session-activated</div><div class="ws-ev-desc">Cron job pushes personal room notification</div></div></div>
+            <div class="ws-ev"><div class="ws-ev-dot" style="background:#38bdf8"></div><div><div class="ws-ev-name">ai-tutor-sync</div><div class="ws-ev-desc">Generated AI module broadcast to all participants</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Feature locking:</strong> When a user opens the AI Tutor or PDF panel, a <code>feature-lock</code> event is emitted. The server broadcasts the lock state to all peers — others see a "currently in use" notice. When the user is done, <code>feature-unlock</code> releases it.
+      </div>
+    </div>
+
+    <!-- WEBRTC -->
+    <div class="doc-section reveal" id="webrtc">
+      <div class="section-tag">Peer-to-Peer Video</div>
+      <h2 class="doc-h2">WebRTC — how the<br/>video mesh works</h2>
+      <p class="doc-p">Video data never touches the server. Socket.IO only carries the <em>signaling handshake</em> — a few kilobytes of SDP and ICE packets. After that, the video stream travels directly browser-to-browser.</p>
+
+      <div class="diagram-box reveal">
+        <div class="diagram-head">
+          <div class="diagram-title">WebRTC Signaling Flow</div>
+          <div class="rtc-live">P2P Active</div>
+        </div>
+        <div class="diagram-body">
+          <div class="rtc-peers">
+            <div class="rtc-peer">
+              <div class="rtc-screen">👤</div>
+              <div class="rtc-peer-name">Peer A</div>
+              <div class="rtc-peer-sub">Initiator</div>
+            </div>
+            <div>
+              <div class="rtc-arrow">
+                <div class="rtc-arrow-label">① SDP Offer</div>
+                <div class="rtc-arrow-line"><div class="rtc-arrow-pulse"></div></div>
+              </div>
+              <div class="rtc-relay" style="margin:.5rem 0">
+                <div class="rtc-relay-name">Socket.IO</div>
+                <div class="rtc-relay-sub">Signal relay only</div>
+              </div>
+              <div class="rtc-arrow">
+                <div class="rtc-arrow-line"><div class="rtc-arrow-pulse"></div></div>
+                <div class="rtc-arrow-label">② SDP Answer</div>
+              </div>
+            </div>
+            <div class="rtc-peer">
+              <div class="rtc-screen">👤</div>
+              <div class="rtc-peer-name">Peer B</div>
+              <div class="rtc-peer-sub">Responder</div>
+            </div>
+          </div>
+          <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--green);margin-bottom:1.25rem">
+            ③ ICE candidates exchanged via STUN → Direct P2P stream ✓
+          </div>
+          <div class="rtc-steps">
+            <div class="rtc-step"><div class="rtc-num">1</div><div class="rtc-text">Peer A calls <code>getUserMedia()</code> — camera/mic stream captured locally</div></div>
+            <div class="rtc-step"><div class="rtc-num">2</div><div class="rtc-text">Creates <code>RTCPeerConnection</code> with Google STUN servers in ICE config</div></div>
+            <div class="rtc-step"><div class="rtc-num">3</div><div class="rtc-text"><code>createOffer()</code> → set local description → emit <code>webrtc-offer</code> via Socket.IO</div></div>
+            <div class="rtc-step"><div class="rtc-num">4</div><div class="rtc-text">Peer B receives offer, sets remote description, calls <code>createAnswer()</code></div></div>
+            <div class="rtc-step"><div class="rtc-num">5</div><div class="rtc-text">ICE candidates exchanged via <code>webrtc-ice-candidate</code> — STUN resolves public IPs</div></div>
+            <div class="rtc-step"><div class="rtc-num">6</div><div class="rtc-text"><strong>Direct P2P video stream established. Server no longer involved in video data.</strong></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout green">
+        <strong>Why P2P?</strong> Video never touches the server — no server bandwidth cost, lower latency. The server only relays the handshake (a few KB total). After that, streams go straight between browsers.
+      </div>
+    </div>
+
+    <!-- AI -->
+    <div class="doc-section reveal" id="ai">
+      <div class="section-tag">AI Integration</div>
+      <h2 class="doc-h2">Three AI systems,<br/>one API route</h2>
+      <p class="doc-p">All AI requests flow through <code>POST /api/chat</code>. The route inspects request body flags and routes to the right model via OpenRouter.</p>
+      <div class="ai-grid">
+        <div class="ai-card">
+          <div class="ai-card-head">🤖 Mittar — AI Assistant</div>
+          <div class="ai-card-body">
+            <div class="chat">
+              <div class="chat-msg user"><div class="chat-av" style="color:var(--accent)">N</div><div class="chat-bub">Create a private DSA group with a PIN</div></div>
+              <div class="chat-msg ai"><div class="chat-av">M</div><div class="chat-bub">Creating your group now...<br/><div class="chat-tag">[CREATE_GROUP:{"name":"DSA","isPrivate":true}]</div></div></div>
+              <div class="chat-msg user"><div class="chat-av" style="color:var(--accent)">N</div><div class="chat-bub">Take me to the discover page</div></div>
+              <div class="chat-msg ai"><div class="chat-av">M</div><div class="chat-bub">On your way! 👋<br/><div class="chat-tag">[NAVIGATE:/discover]</div></div></div>
+            </div>
+            <div class="callout" style="margin-top:.75rem;font-size:.76rem">
+              <strong>Action tags</strong> in Mittar's responses trigger real platform actions — no extra API calls.
+            </div>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-head">🗺 Model Routing</div>
+          <div class="ai-card-body">
+            <table class="model-table">
+              <thead><tr><th>Request Type</th><th>Model</th></tr></thead>
+              <tbody>
+                <tr><td>Mittar / study chat</td><td><span class="model-chip" style="background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-b)">LLaMA 3.1 8B</span></td></tr>
+                <tr><td>AI Tutor modules</td><td><span class="model-chip" style="background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-b)">LLaMA 3.1 8B</span></td></tr>
+                <tr><td>PDF Q&A chat</td><td><span class="model-chip" style="background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-b)">LLaMA 3.1 8B</span></td></tr>
+                <tr><td>Document analysis</td><td><span class="model-chip" style="background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-b)">Gemini Flash 1.5</span></td></tr>
+                <tr><td>Marks card vision</td><td><span class="model-chip" style="background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-b)">Gemini Flash 1.5</span></td></tr>
+              </tbody>
+            </table>
+            <div style="font-weight:600;font-size:.8rem;margin:1rem 0 .4rem;color:var(--ink)">PDF Analysis Pipeline</div>
+            <div class="pipeline">
+              <div class="pipe-step"><div class="pipe-num">1</div>Upload PDF or TXT file</div>
+              <div class="pipe-step"><div class="pipe-num">2</div>pdfreader extracts full text server-side</div>
+              <div class="pipe-step"><div class="pipe-num">3</div>Text → Gemini Flash → JSON output</div>
+              <div class="pipe-step"><div class="pipe-num">4</div>Results synced via Socket.IO to all peers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAMIFICATION -->
+    <div class="doc-section reveal" id="gamification">
+      <div class="section-tag">Engagement</div>
+      <h2 class="doc-h2">Streak system</h2>
+      <p class="doc-p">Consistent study habits are hard. Grace periods and quest-based restoration mean one missed day doesn't destroy weeks of progress.</p>
+      <div class="streak-wrap">
+        <div class="streak-card">
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.4rem">Current Streak</div>
+          <div style="display:flex;align-items:baseline;gap:.4rem">
+            <div class="streak-big">14</div>
+            <div style="font-size:.9rem;color:var(--ink-3)">days 🔥</div>
+          </div>
+          <div class="streak-track"><div class="streak-fill" style="width:67%"></div></div>
+          <div class="streak-note">67% to 21-day milestone · 1,050 XP total</div>
+          <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.3rem">
+            <div class="pipe-step"><div class="pipe-num">+50</div>Daily login XP</div>
+            <div class="pipe-step"><div class="pipe-num">+100</div>Quest complete XP</div>
+            <div class="pipe-step"><div class="pipe-num">+10</div>Session joined XP</div>
+          </div>
+        </div>
+        <div class="streak-states">
+          <div class="streak-state" style="border-color:var(--amber-b);background:var(--amber-bg)">
+            <span style="font-size:1rem">🔥</span>
+            <div><div class="streak-state-name" style="color:var(--amber)">Active Streak</div><div class="streak-state-desc">Daily check-in logged. XP awarded.</div></div>
+          </div>
+          <div class="streak-state" style="border-color:#4a2020;background:var(--red-bg)">
+            <span style="font-size:1rem">⚡</span>
+            <div><div class="streak-state-name" style="color:var(--red)">Grace Period</div><div class="streak-state-desc">24h window after missed day. Quests activate automatically.</div></div>
+          </div>
+          <div class="streak-state" style="border-color:var(--green-b);background:var(--green-bg)">
+            <span style="font-size:1rem">✅</span>
+            <div><div class="streak-state-name" style="color:var(--green)">Quest Restored</div><div class="streak-state-desc">Complete flashcards, quiz, or join a session. Streak saved.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATABASE -->
+    <div class="doc-section reveal" id="database">
+      <div class="section-tag">Data Layer</div>
+      <h2 class="doc-h2">MongoDB schema</h2>
+      <p class="doc-p">Five collections. The User model carries the most — academic metrics, streak state, skill matchmaking data, and social graph all live there.</p>
+      <div class="schema-grid">
+        <div class="schema-card">
+          <div class="schema-head"><div class="schema-model">User</div><div class="schema-coll">users</div></div>
+          <div class="schema-fields">
+            <div class="sf"><span class="sf-key">email</span><span class="sf-type">String</span><span class="sf-note">unique</span></div>
+            <div class="sf"><span class="sf-key">skillsToTeach</span><span class="sf-type">[String]</span><span class="sf-note">matchmaking</span></div>
+            <div class="sf"><span class="sf-key">skillsToLearn</span><span class="sf-type">[String]</span><span class="sf-note">matchmaking</span></div>
+            <div class="sf"><span class="sf-key">followers</span><span class="sf-type">[ObjectId]</span><span class="sf-note">→ User</span></div>
+            <div class="sf"><span class="sf-key">streak.current</span><span class="sf-type">Number</span></div>
+            <div class="sf"><span class="sf-key">streak.graceActive</span><span class="sf-type">Boolean</span></div>
+            <div class="sf"><span class="sf-key">streak.quests</span><span class="sf-type">[Object]</span></div>
+            <div class="sf"><span class="sf-key">academicMetrics</span><span class="sf-type">Object</span><span class="sf-note">AI grades</span></div>
+          </div>
+        </div>
+        <div class="schema-card">
+          <div class="schema-head"><div class="schema-model">Group</div><div class="schema-coll">groups</div></div>
+          <div class="schema-fields">
+            <div class="sf"><span class="sf-key">owner</span><span class="sf-type">ObjectId</span><span class="sf-note">→ User</span></div>
+            <div class="sf"><span class="sf-key">members</span><span class="sf-type">[ObjectId]</span></div>
+            <div class="sf"><span class="sf-key">isPrivate</span><span class="sf-type">Boolean</span></div>
+            <div class="sf"><span class="sf-key">passcode</span><span class="sf-type">String</span><span class="sf-note">4-6 digit PIN</span></div>
+            <div class="sf"><span class="sf-key">sessions</span><span class="sf-type">[Object]</span></div>
+            <div class="sf"><span class="sf-key">sessions.status</span><span class="sf-type">String</span><span class="sf-note">scheduled|active</span></div>
+            <div class="sf"><span class="sf-key">maxMembers</span><span class="sf-type">Number</span><span class="sf-note">2–100</span></div>
+          </div>
+        </div>
+        <div class="schema-card">
+          <div class="schema-head"><div class="schema-model">Notification</div><div class="schema-coll">notifications</div></div>
+          <div class="schema-fields">
+            <div class="sf"><span class="sf-key">recipient</span><span class="sf-type">ObjectId</span><span class="sf-note">→ User</span></div>
+            <div class="sf"><span class="sf-key">type</span><span class="sf-type">String</span><span class="sf-note">GROUP|FOLLOW</span></div>
+            <div class="sf"><span class="sf-key">link</span><span class="sf-type">String</span><span class="sf-note">deep link</span></div>
+            <div class="sf"><span class="sf-key">read</span><span class="sf-type">Boolean</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API -->
+    <div class="doc-section reveal" id="api">
+      <div class="section-tag">API Reference</div>
+      <h2 class="doc-h2">REST endpoints</h2>
+      <p class="doc-p">All routes live under Next.js API routes. Authentication via NextAuth session cookies — no manual token headers needed from the frontend.</p>
+
+      <div class="doc-h3" style="margin:1.25rem 0 .4rem">Groups & Sessions</div>
+      <table class="api-table">
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method m-get">GET</span></td><td class="ep">/api/groups</td><td>List groups with search and filter</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/groups</td><td>Create a new study group</td></tr>
+          <tr><td><span class="method m-get">GET</span></td><td class="ep">/api/groups/[groupId]</td><td>Group details and session list</td></tr>
+          <tr><td><span class="method m-patch">PATCH</span></td><td class="ep">/api/groups/[groupId]</td><td>Update group settings or members</td></tr>
+          <tr><td><span class="method m-delete">DELETE</span></td><td class="ep">/api/groups/[groupId]</td><td>Delete group (owner only)</td></tr>
+          <tr><td><span class="method m-get">GET</span></td><td class="ep">/api/sessions/check</td><td>Cron-triggered session activation</td></tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h3" style="margin:1.25rem 0 .4rem">Users & Discovery</div>
+      <table class="api-table">
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method m-get">GET</span></td><td class="ep">/api/users/discover</td><td>Skill-based matchmaking suggestions</td></tr>
+          <tr><td><span class="method m-get">GET</span></td><td class="ep">/api/users/profile</td><td>Current authenticated user profile</td></tr>
+          <tr><td><span class="method m-patch">PATCH</span></td><td class="ep">/api/users/profile</td><td>Update profile fields</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/users/analyze-result</td><td>AI vision analysis of marks card image</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/users/follow</td><td>Send a follow / connection request</td></tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h3" style="margin:1.25rem 0 .4rem">AI & Streak</div>
+      <table class="api-table">
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/chat</td><td>Unified AI — Mittar, tutor, PDF Q&A</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/pdf</td><td>Extract text from PDF file upload</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/streak/checkin</td><td>Daily streak check-in</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/streak/complete-quest</td><td>Complete quest to restore streak</td></tr>
+          <tr><td><span class="method m-post">POST</span></td><td class="ep">/api/streak/xp</td><td>Award XP to authenticated user</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ENV -->
+    <div class="doc-section reveal" id="env">
+      <div class="section-tag">Configuration</div>
+      <h2 class="doc-h2">Environment variables</h2>
+      <p class="doc-p">Create <code>.env.local</code> in the project root before running locally or deploying.</p>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="env-key">MONGODB_URI</td><td><span class="req">Required</span></td><td>MongoDB Atlas connection string</td></tr>
+          <tr><td class="env-key">NEXTAUTH_SECRET</td><td><span class="req">Required</span></td><td>32+ char secret for JWT signing</td></tr>
+          <tr><td class="env-key">NEXTAUTH_URL</td><td><span class="req">Required</span></td><td>Canonical app URL for NextAuth callbacks</td></tr>
+          <tr><td class="env-key">GOOGLE_CLIENT_ID</td><td><span class="req">Required</span></td><td>Google OAuth 2.0 client ID</td></tr>
+          <tr><td class="env-key">GOOGLE_CLIENT_SECRET</td><td><span class="req">Required</span></td><td>Google OAuth 2.0 client secret</td></tr>
+          <tr><td class="env-key">GITHUB_ID</td><td><span class="req">Required</span></td><td>GitHub OAuth App client ID</td></tr>
+          <tr><td class="env-key">GITHUB_SECRET</td><td><span class="req">Required</span></td><td>GitHub OAuth App client secret</td></tr>
+          <tr><td class="env-key">OPENROUTER_API_KEY</td><td><span class="req">Required</span></td><td>OpenRouter key for AI model access</td></tr>
+          <tr><td class="env-key">NEXT_PUBLIC_BACKEND_URL</td><td><span class="req">Required</span></td><td>Backend server URL (Render URL in production)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DEPLOY -->
+    <div class="doc-section reveal" id="deploy">
+      <div class="section-tag">Deployment</div>
+      <h2 class="doc-h2">Hosting strategy</h2>
+      <p class="doc-p">Split deployment — Vercel for the frontend edge, Render for the custom Node server that needs a persistent process for Socket.IO.</p>
+      <div class="deploy-grid">
+        <div class="deploy-card">
+          <div class="deploy-head"><span>🔺</span>Vercel — Frontend</div>
+          <div class="deploy-body">
+            <p style="font-size:.78rem;color:var(--ink-2);line-height:1.6;margin-bottom:.9rem">Serves the Next.js frontend. <code>vercel.json</code> rewrites all <code>/api/*</code> to the Render backend, eliminating CORS issues.</p>
+            <div class="code"><span class="c"># Deploy to Vercel</span>
+npm i -g vercel
+vercel --prod</div>
+          </div>
+        </div>
+        <div class="deploy-card">
+          <div class="deploy-head"><span>🎨</span>Render — Backend</div>
+          <div class="deploy-body">
+            <p style="font-size:.78rem;color:var(--ink-2);line-height:1.6;margin-bottom:.9rem">Custom Node server. Vercel's serverless kills persistent connections — Render keeps Socket.IO alive.</p>
+            <div class="deploy-row"><span class="dk">Build</span><span class="dv">npm install && npm run build</span></div>
+            <div class="deploy-row"><span class="dk">Start</span><span class="dv">NODE_ENV=production node server.js</span></div>
+            <div class="deploy-row"><span class="dk">Health</span><span class="dv" style="color:var(--green)">/health → 200 OK</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout amber" style="margin-top:1rem">
+        <strong>Important:</strong> Set <code>NEXT_PUBLIC_BACKEND_URL</code> to your Render URL in both environments. The frontend uses this to connect Socket.IO to the correct server in production.
+      </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="doc-section reveal" id="team">
+      <div class="section-tag">Team</div>
+      <h2 class="doc-h2">Built during a hackathon</h2>
+      <p class="doc-p">Designed, engineered, and shipped under pressure by four developers.</p>
+      <div class="team-row">
+        <div class="team-card"><div class="team-ava"><img src="joel.jpeg" alt="Joel" onerror="this.parentElement.innerHTML='👨‍💻'"/></div><div class="team-name">Nathaniel</div><div class="team-role">Full-Stack</div><div class="team-stack">Next.js · Node · AI</div></div>
+        <div class="team-card"><div class="team-ava"><img src="abhijithcard.jpeg" alt="Abhijith" onerror="this.parentElement.innerHTML='👨‍💻'"/></div><div class="team-name">Abhijith</div><div class="team-role">Developer</div><div class="team-stack">Frontend · UI</div></div>
+        <div class="team-card"><div class="team-ava"><img src="ansar.jpeg" alt="Ansar" onerror="this.parentElement.innerHTML='👨‍💻'"/></div><div class="team-name">Ansar</div><div class="team-role">Developer</div><div class="team-stack">Backend · API</div></div>
+        <div class="team-card"><div class="team-ava"><img src="nikhil.jpeg" alt="Nikhil" onerror="this.parentElement.innerHTML='👨‍💻'"/></div><div class="team-name">Nikhil</div><div class="team-role">Developer</div><div class="team-stack">Features · Testing</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="doc-footer">
+    <div><div class="footer-name">MindMesh Docs</div><div class="footer-sub">v1.0 · 2026 · MIT License</div></div>
+    <div class="footer-links">
+      <a href="https://mind-mesh-refactored.onrender.com" target="_blank">Live App</a>
+      <a href="https://github.com/imjoe77/Mind-Mesh" target="_blank">GitHub</a>
+      <a href="#overview">↑ Top</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const obs = new IntersectionObserver(e => e.forEach(el => { if(el.isIntersecting) el.target.classList.add('in'); }), {threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+const sectionIds = ['overview','features','quickstart','tech-stack','websockets','webrtc','ai','gamification','database','api','env','deploy','team'];
+const links = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sectionIds.forEach(id => { const el = document.getElementById(id); if(el && el.getBoundingClientRect().top < 110) cur = id; });
+  links.forEach(a => { const h = a.getAttribute('href').slice(1); a.classList.toggle('active', h === cur); });
+}, {passive:true});
+</script>
+</body>
+</html>
