@@ -411,7 +411,7 @@ code{font-family:var(--mono);font-size:.88em;background:var(--card);border:1px s
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-brand">
-    <div class="brand-mark">🧠</div>
+    <div class="brand-mark" style="background:none;border-radius:7px;overflow:hidden;padding:0"><img src="logo.png" alt="MindMesh" style="width:30px;height:30px;object-fit:contain;display:block"/></div>
     <div>
       <div class="brand-name">MindMesh</div>
       <div class="brand-ver">v1.0 · 2026</div>
@@ -852,29 +852,30 @@ npm run dev</div>
     <div class="doc-section reveal" id="deploy">
       <div class="section-tag">Deployment</div>
       <h2 class="doc-h2">Hosting strategy</h2>
-      <p class="doc-p">Split deployment — Vercel for the frontend edge, Render for the custom Node server that needs a persistent process for Socket.IO.</p>
+      <p class="doc-p">Both the frontend and backend are deployed on Render as a single unified service. Because MindMesh uses a custom <code>server.js</code> that attaches Socket.IO to the Next.js HTTP server, the entire app runs as one persistent Node process — no split deployment needed.</p>
       <div class="deploy-grid">
         <div class="deploy-card">
-          <div class="deploy-head"><span>🔺</span>Vercel — Frontend</div>
+          <div class="deploy-head"><span>🎨</span>Render — Full Stack</div>
           <div class="deploy-body">
-            <p style="font-size:.78rem;color:var(--ink-2);line-height:1.6;margin-bottom:.9rem">Serves the Next.js frontend. <code>vercel.json</code> rewrites all <code>/api/*</code> to the Render backend, eliminating CORS issues.</p>
-            <div class="code"><span class="c"># Deploy to Vercel</span>
-npm i -g vercel
-vercel --prod</div>
-          </div>
-        </div>
-        <div class="deploy-card">
-          <div class="deploy-head"><span>🎨</span>Render — Backend</div>
-          <div class="deploy-body">
-            <p style="font-size:.78rem;color:var(--ink-2);line-height:1.6;margin-bottom:.9rem">Custom Node server. Vercel's serverless kills persistent connections — Render keeps Socket.IO alive.</p>
+            <p style="font-size:.78rem;color:var(--ink-2);line-height:1.6;margin-bottom:.9rem">One service runs everything — Next.js frontend, API routes, and Socket.IO WebSocket server all from a single <code>server.js</code> process.</p>
             <div class="deploy-row"><span class="dk">Build</span><span class="dv">npm install && npm run build</span></div>
             <div class="deploy-row"><span class="dk">Start</span><span class="dv">NODE_ENV=production node server.js</span></div>
             <div class="deploy-row"><span class="dk">Health</span><span class="dv" style="color:var(--green)">/health → 200 OK</span></div>
+            <div class="deploy-row"><span class="dk">Live</span><span class="dv" style="color:var(--accent)">mind-mesh-refactored.onrender.com</span></div>
+          </div>
+        </div>
+        <div class="deploy-card">
+          <div class="deploy-head"><span>⚙️</span>Why Render over Vercel</div>
+          <div class="deploy-body">
+            <p style="font-size:.78rem;color:var(--ink-2);line-height:1.6;margin-bottom:.9rem">Vercel's serverless runtime kills long-lived connections after a few seconds — Socket.IO WebSockets would disconnect immediately. Render runs a persistent process, keeping WebSocket connections alive for the entire session.</p>
+            <div class="deploy-row"><span class="dk">Socket.IO</span><span class="dv" style="color:var(--green)">Persistent ✓</span></div>
+            <div class="deploy-row"><span class="dk">WebRTC Signaling</span><span class="dv" style="color:var(--green)">Persistent ✓</span></div>
+            <div class="deploy-row"><span class="dk">Session Cron</span><span class="dv" style="color:var(--green)">Persistent ✓</span></div>
           </div>
         </div>
       </div>
-      <div class="callout amber" style="margin-top:1rem">
-        <strong>Important:</strong> Set <code>NEXT_PUBLIC_BACKEND_URL</code> to your Render URL in both environments. The frontend uses this to connect Socket.IO to the correct server in production.
+      <div class="callout green" style="margin-top:1rem">
+        <strong>Single service advantage:</strong> No CORS configuration, no API proxying, no split environment variables. The frontend, API, and WebSocket server all share the same origin — <code>mind-mesh-refactored.onrender.com</code>.
       </div>
     </div>
 
